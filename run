@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+N_REPS=100
+DOWN_COUNTS=5
+REST_COUNTS=5
+
+seconds-pretty() {
+  printf '%s' "$(($1 / 60)) minutes and $(($1 % 60)) seconds"
+}
+
+
+lead_in() {
+  local total_seconds;
+  local dur;
+  total_seconds="$((
+    ( N_REPS * (DOWN_COUNTS + 1)) +
+    ( N_REPS * (REST_COUNTS + 1))))"
+  dur="$(seconds-pretty "$total_seconds")"
+
+  printf \
+    '\n%s\n\nREPS: %s\n\nDOWN:  %s seconds\nREST:  %s seconds\nTOTAL: %s\n' \
+    '_______________' "$N_REPS" "$((DOWN_COUNTS + 1))" "$((REST_COUNTS + 1))" "$dur"
+
+  say "Today's workout is $N_REPS burpees with $((DOWN_COUNTS + 1)) seconds per repetition and $((REST_COUNTS + 1)) second rests"
+  sleep 1
+  say "This workout will take $dur"
+  sleep 1
+  say "Go!"
+  sleep 1
+}
+
+down() {
+  say "Down $1" & sleep 1
+  for ((i=0; i < DOWN_COUNTS; ++i)); do
+    say "$((i + 2))" & sleep 1 ;
+  done
+}
+
+rest() {
+  say Rest & sleep 1
+  for ((i=0; i < REST_COUNTS; i++)); do
+    say "$((i + 2))" & sleep 1 ;
+  done
+}
+
+congrats() { 
+  say "Wow you are all done"
+  sleep 1
+  say "How do you feel?"
+  sleep 1
+  say "That was not easy and you did a great job"
+  sleep 1
+  say "Now rest up and I will see you next time"
+}
+
+main() {
+  local nreps;
+  nreps="$N_REPS";
+  local cur;
+  cur=1
+
+  lead_in
+  while [ "$cur" -le "$nreps" ]; do
+    printf '.'
+    if [ "$((cur % 10))" = 0 ]; then printf '|'; fi
+    down "$cur"
+    rest
+    cur="$((cur + 1))"
+  done
+
+  congrats
+  sleep 1
+  say "Goodbye"
+}
+
+main "$@"
