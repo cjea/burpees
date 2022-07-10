@@ -2,7 +2,7 @@
 set -euo pipefail
 
 N_REPS=100
-DOWN_COUNTS=5
+DOWN_COUNTS=4
 REST_COUNTS=5
 
 seconds-pretty() {
