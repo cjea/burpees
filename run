@@ -3,7 +3,7 @@ set -euo pipefail
 
 N_REPS=100
 DOWN_COUNTS=4
-REST_COUNTS=5
+REST_COUNTS=4
 
 seconds-pretty() {
   printf '%s' "$(($1 / 60)) minutes and $(($1 % 60)) seconds"
