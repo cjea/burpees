@@ -2,8 +2,8 @@
 set -euo pipefail
 
 N_REPS=100
-DOWN_COUNTS=4
-REST_COUNTS=3
+DOWN_COUNTS=6
+REST_COUNTS=6
 
 seconds-pretty() {
   printf '%s' "$(($1 / 60)) minutes and $(($1 % 60)) seconds"
@@ -31,7 +31,14 @@ lead_in() {
 }
 
 down() {
-  say "Down $1" & sleep 1
+  local rep;
+  rep="$1";
+  local m;
+  m=$((rep % 5))
+  if [ "$m" == 0 ]; then say "Down $rep" & sleep 1;
+  else say "Down" & sleep 1 ; 
+  fi
+
   for ((i=0; i < DOWN_COUNTS; ++i)); do
     say "$((i + 2))" & sleep 1 ;
   done
@@ -52,6 +59,7 @@ congrats() {
   say "That was not easy and you did a great job"
   sleep 1
   say "Now rest up and I will see you next time"
+  sleep 1
 }
 
 main() {
@@ -70,7 +78,6 @@ main() {
   done
 
   congrats
-  sleep 1
   say "Goodbye"
 }
 
